@@ -1,5 +1,6 @@
 package org.osgl.aaa.spring.web;
 
+import org.osgl.aaa.AAA;
 import org.osgl.aaa.AAAContext;
 import org.osgl.aaa.Principal;
 import org.rythmengine.utils.S;
@@ -21,6 +22,7 @@ public abstract class A3Manager extends HandlerInterceptorAdapter {
         AAAContext ctxt = AAAConfigurer.getAAAContext();
         ctxt.setGuardedTarget(null);
         ctxt.setCurrentPrincipal(null);
+        AAA.setContext(null);
     }
 
     @Override
@@ -28,6 +30,7 @@ public abstract class A3Manager extends HandlerInterceptorAdapter {
         String username = resolveUserName(request);
         if (S.empty(username)) return true;
         AAAContext ctxt = AAAConfigurer.getAAAContext();
+        AAA.setContext(ctxt);
         Principal user = ctxt.getPersistentService().findByName(username, Principal.class);
         if (null != user) {
             ctxt.setCurrentPrincipal(user);

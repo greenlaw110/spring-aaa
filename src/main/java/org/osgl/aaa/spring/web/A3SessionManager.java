@@ -1,5 +1,6 @@
 package org.osgl.aaa.spring.web;
 
+import org.osgl.aaa.AAA;
 import org.osgl.aaa.AAAContext;
 import org.osgl.aaa.Principal;
 import org.rythmengine.spring.web.RythmConfigurer;
@@ -35,6 +36,7 @@ public class A3SessionManager extends A3Manager {
                 public void onSessionResolved(Session session) {
                     String username = session.get(AAAConfigurer.getSessionKeyUserName());
                     AAAContext ctxt = AAAConfigurer.getAAAContext();
+                    AAA.setContext(ctxt);
                     Principal user = ctxt.getPersistentService().findByName(username, Principal.class);
                     if (null != user) {
                         ctxt.setCurrentPrincipal(user);
