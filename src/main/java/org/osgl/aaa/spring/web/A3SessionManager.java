@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Created by luog on 14/01/14.
  */
-public class A3SessionManager extends A3Manager {
+public class A3SessionManager extends A3Manager implements SessionManager.Listener {
 
     private static final ThreadLocal<_.T2<Principal, Object>> param = new ThreadLocal<_.T2<Principal, Object>>();
 
@@ -45,33 +45,34 @@ public class A3SessionManager extends A3Manager {
     }
 
     @Override
+    public void onSessionResolved(Session session) {
+        String username = session.get(AAAConfigurer.getSessionKeyUserName());
+        AAAContext ctxt = AAAConfigurer.getAAAContext();
+        AAA.setContext(ctxt);
+        Principal user = ctxt.getPersistentService().findByName(username, Principal.class);
+        if (null != user) {
+            ctxt.setCurrentPrincipal(user);
+        }
+        _.T2<Principal, Object> t2 = param.get();
+        if (null == t2) {
+            t2 = _.T2(user, null);
+            param.set(t2);
+        } else {
+            Object handler = t2._2;
+            fireEvent(user, handler);
+        }
+    }
+
+    @Override
+    public void onSessionCleanUp() {
+        // nothing to do here as clean up work has been done in A3Manager
+    }
+
+    @Override
     protected void register(InterceptorRegistry registry) {
         if (RythmConfigurer.getInstance().sessionManagerEnabled()) {
-            SessionManager.addListener(new SessionManager.Listener() {
-                @Override
-                public void onSessionResolved(Session session) {
-                    String username = session.get(AAAConfigurer.getSessionKeyUserName());
-                    AAAContext ctxt = AAAConfigurer.getAAAContext();
-                    AAA.setContext(ctxt);
-                    Principal user = ctxt.getPersistentService().findByName(username, Principal.class);
-                    if (null != user) {
-                        ctxt.setCurrentPrincipal(user);
-                    }
-                    _.T2<Principal, Object> t2 = param.get();
-                    if (null == t2) {
-                        t2 = _.T2(user, null);
-                        param.set(t2);
-                    } else {
-                        Object handler = t2._2;
-                        fireEvent(user, handler);
-                    }
-                }
-
-                @Override
-                public void onSessionCleanUp() {
-                    // nothing to do here as clean up work has been done in A3Manager
-                }
-            });
+            SessionManager.addListener(this);
+            registry.addInterceptor(this);
         } else {
             registry.addInterceptor(new A3HttpSessionManager());
         }
