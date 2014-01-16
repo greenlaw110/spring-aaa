@@ -29,7 +29,7 @@ public class A3ExceptionHandler implements MessageSourceAware {
         this.messageSource = messageSource;
     }
 
-    @ExceptionHandler(value = Exception.class)
+    @ExceptionHandler(value = NoAccessException.class)
     public ModelAndView defaultErrorHandler(NoAccessException e, HttpServletResponse response) throws Exception {
         int statusCode = HttpStatus.FORBIDDEN.value();
         String reason = e.getMessage();
