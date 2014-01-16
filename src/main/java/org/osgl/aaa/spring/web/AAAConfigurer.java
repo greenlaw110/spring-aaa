@@ -40,7 +40,6 @@ public class AAAConfigurer extends WebMvcConfigurerAdapter implements WebMvcConf
         }
     }
 
-
     public static AAAContext getAAAContext() {
         if (null == ctxt) {
             ctxt = new SimpleAAAContext(authen, author, db, superUser, allowSystem ? SimplePrincipal.createSystemPrincipal(system) : null, allowSystem);

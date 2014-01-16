@@ -1,8 +1,10 @@
 package org.osgl.aaa.spring.web;
 
+import org.osgl._;
 import org.osgl.aaa.AAA;
 import org.osgl.aaa.AAAContext;
 import org.osgl.aaa.Principal;
+import org.osgl.util.E;
 import org.rythmengine.spring.web.RythmConfigurer;
 import org.rythmengine.spring.web.Session;
 import org.rythmengine.spring.web.SessionManager;
@@ -16,15 +18,29 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class A3SessionManager extends A3Manager {
 
+    private static final ThreadLocal<_.T2<Principal, Object>> param = new ThreadLocal<_.T2<Principal, Object>>();
+
     @Override
     protected String resolveUserName(HttpServletRequest request) {
-        // this method will not be used
-        return null;
+        throw E.unsupport();
+    }
+
+    private void fireEvent(Principal principal, Object handler) {
+        firePrincipalResolved(principal, handler);
+        param.remove();
     }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        // do nothing here as it is triggered by SessionManager
+        _.T2<Principal, Object> t2 = param.get();
+        if (null == t2) {
+            t2 = _.T2(null, handler);
+            param.set(t2);
+        } else {
+            Principal p = t2._1;
+            fireEvent(p, handler);
+        }
+
         return true;
     }
 
@@ -41,11 +57,19 @@ public class A3SessionManager extends A3Manager {
                     if (null != user) {
                         ctxt.setCurrentPrincipal(user);
                     }
+                    _.T2<Principal, Object> t2 = param.get();
+                    if (null == t2) {
+                        t2 = _.T2(user, null);
+                        param.set(t2);
+                    } else {
+                        Object handler = t2._2;
+                        fireEvent(user, handler);
+                    }
                 }
 
                 @Override
                 public void onSessionCleanUp() {
-                    // nothing to do here is clean up work has been done in A3Manager
+                    // nothing to do here as clean up work has been done in A3Manager
                 }
             });
         } else {

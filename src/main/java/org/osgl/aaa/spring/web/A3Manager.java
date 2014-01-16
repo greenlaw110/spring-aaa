@@ -3,6 +3,8 @@ package org.osgl.aaa.spring.web;
 import org.osgl.aaa.AAA;
 import org.osgl.aaa.AAAContext;
 import org.osgl.aaa.Principal;
+import org.osgl.util.C;
+import org.osgl.util.E;
 import org.rythmengine.utils.S;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -15,8 +17,25 @@ import javax.servlet.http.HttpServletResponse;
  */
 public abstract class A3Manager extends HandlerInterceptorAdapter {
 
+    public static interface Listener {
+        void onPrincipalResolved(Principal principal, Object handler);
+    }
+
     protected abstract String resolveUserName(HttpServletRequest request);
     protected abstract void register(InterceptorRegistry registry);
+
+    private static final C.List<Listener> listeners = C.newList();
+
+    protected final void firePrincipalResolved(Principal principal, Object handler) {
+        for (Listener l : listeners) {
+            l.onPrincipalResolved(principal, handler);
+        }
+    }
+
+    public static void registerListener(Listener listener) {
+        E.NPE(listener);
+        listeners.add(listener);
+    }
 
     private void cleanUp() {
         AAAContext ctxt = AAAConfigurer.getAAAContext();
@@ -28,13 +47,16 @@ public abstract class A3Manager extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String username = resolveUserName(request);
-        if (S.empty(username)) return true;
-        AAAContext ctxt = AAAConfigurer.getAAAContext();
-        AAA.setContext(ctxt);
-        Principal user = ctxt.getPersistentService().findByName(username, Principal.class);
-        if (null != user) {
-            ctxt.setCurrentPrincipal(user);
+        Principal user = null;
+        if (S.notEmpty(username)) {
+            AAAContext ctxt = AAAConfigurer.getAAAContext();
+            AAA.setContext(ctxt);
+            user = ctxt.getPersistentService().findByName(username, Principal.class);
+            if (null != user) {
+                ctxt.setCurrentPrincipal(user);
+            }
         }
+        firePrincipalResolved(user, handler);
         return true;
     }
 
