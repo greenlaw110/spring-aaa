@@ -27,7 +27,6 @@ public class A3SessionManager extends A3Manager implements SessionManager.Listen
 
     private void fireEvent(Principal principal, Object handler) {
         firePrincipalResolved(principal, handler);
-        param.remove();
     }
 
     @Override
@@ -65,7 +64,7 @@ public class A3SessionManager extends A3Manager implements SessionManager.Listen
 
     @Override
     public void onSessionCleanUp() {
-        // nothing to do here as clean up work has been done in A3Manager
+        param.remove();
     }
 
     @Override
