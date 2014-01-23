@@ -25,8 +25,8 @@ public class A3SessionManager extends A3Manager implements SessionManager.Listen
         throw E.unsupport();
     }
 
-    private void fireEvent(Principal principal, Object handler, HttpServletRequest request) {
-        firePrincipalResolved(principal, handler, request);
+    private void fireEvent(Principal principal, Object handler) {
+        firePrincipalResolved(principal, handler);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class A3SessionManager extends A3Manager implements SessionManager.Listen
             param.set(t2);
         } else {
             Principal p = t2._1;
-            fireEvent(p, handler, request);
+            fireEvent(p, handler);
         }
 
         return true;
@@ -58,7 +58,7 @@ public class A3SessionManager extends A3Manager implements SessionManager.Listen
             param.set(t2);
         } else {
             Object handler = t2._2;
-            fireEvent(user, handler, SessionManager.request());
+            fireEvent(user, handler);
         }
     }
 

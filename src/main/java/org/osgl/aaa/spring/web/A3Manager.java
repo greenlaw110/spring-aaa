@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 public abstract class A3Manager extends HandlerInterceptorAdapter {
 
     public static interface Listener {
-        void onPrincipalResolved(Principal principal, Object handler, HttpServletRequest request);
+        void onPrincipalResolved(Principal principal, Object handler);
     }
 
     protected abstract String resolveUserName(HttpServletRequest request);
@@ -26,9 +26,9 @@ public abstract class A3Manager extends HandlerInterceptorAdapter {
 
     private static final C.List<Listener> listeners = C.newList();
 
-    protected final void firePrincipalResolved(Principal principal, Object handler, HttpServletRequest request) {
+    protected final void firePrincipalResolved(Principal principal, Object handler) {
         for (Listener l : listeners) {
-            l.onPrincipalResolved(principal, handler, request);
+            l.onPrincipalResolved(principal, handler);
         }
     }
 
@@ -56,7 +56,7 @@ public abstract class A3Manager extends HandlerInterceptorAdapter {
                 ctxt.setCurrentPrincipal(user);
             }
         }
-        firePrincipalResolved(user, handler, request);
+        firePrincipalResolved(user, handler);
         return true;
     }
 
