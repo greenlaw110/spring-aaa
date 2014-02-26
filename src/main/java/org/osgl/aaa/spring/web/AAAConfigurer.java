@@ -27,6 +27,7 @@ public class AAAConfigurer extends WebMvcConfigurerAdapter implements WebMvcConf
     private static String system = AAA.SYSTEM;
     private static int superUser = AAA.SUPER_USER;
     private static boolean enableAAAManager = true;
+    private static Principal systemPrincipal = SimplePrincipal.createSystemPrincipal(system);
     private static String sessionKeyUserName = "username";
     private static AAAContext ctxt;
 
@@ -42,7 +43,7 @@ public class AAAConfigurer extends WebMvcConfigurerAdapter implements WebMvcConf
 
     public static AAAContext getAAAContext() {
         if (null == ctxt) {
-            ctxt = new SimpleAAAContext(authen, author, db, superUser, allowSystem ? SimplePrincipal.createSystemPrincipal(system) : null, allowSystem);
+            ctxt = new SimpleAAAContext(authen, author, db, superUser, allowSystem ? systemPrincipal: null, allowSystem);
         }
         return ctxt;
     }
@@ -60,6 +61,16 @@ public class AAAConfigurer extends WebMvcConfigurerAdapter implements WebMvcConf
     @Autowired
     public void setPersistenceService(AAAPersistentService persistenceService) {
         db = persistenceService;
+    }
+
+    @Autowired(required = false)
+    public void setSystemPrincipal(Principal sys) {
+        systemPrincipal = sys;
+    }
+
+    @Autowired(required = false)
+    public void setAAAContext(AAAContext ctxt) {
+        this.ctxt = ctxt;
     }
 
     public void setAllowSystem(boolean allowSystem) {

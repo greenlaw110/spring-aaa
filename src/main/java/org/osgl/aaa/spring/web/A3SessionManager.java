@@ -33,7 +33,7 @@ public class A3SessionManager extends A3Manager implements SessionManager.Listen
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         _.T2<Principal, Object> t2 = param.get();
         if (null == t2) {
-            t2 = _.T2(null, handler);
+            t2 = _.T2(t2._1, handler);
             param.set(t2);
         } else {
             Principal p = t2._1;
@@ -58,7 +58,9 @@ public class A3SessionManager extends A3Manager implements SessionManager.Listen
             param.set(t2);
         } else {
             Object handler = t2._2;
-            fireEvent(user, handler);
+            if (null != handler) {
+                fireEvent(user, handler);
+            }
         }
     }
 
@@ -73,7 +75,8 @@ public class A3SessionManager extends A3Manager implements SessionManager.Listen
             SessionManager.addListener(this);
             registry.addInterceptor(this);
         } else {
-            registry.addInterceptor(new A3HttpSessionManager());
+            A3HttpSessionManager sm = A3HttpSessionManager.INSTANCE;
+            registry.addInterceptor(sm);
         }
     }
 }

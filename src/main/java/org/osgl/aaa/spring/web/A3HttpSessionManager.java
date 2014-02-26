@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 @Component
 public class A3HttpSessionManager extends A3Manager {
 
+    static final A3HttpSessionManager INSTANCE = new A3HttpSessionManager();
+
     @Override
     protected String resolveUserName(HttpServletRequest request) {
         return S.string(request.getAttribute(AAAConfigurer.getSessionKeyUserName()));
