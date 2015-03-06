@@ -6,9 +6,6 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * Created by luog on 13/01/14.
- */
 @Component
 public class A3HttpSessionManager extends A3Manager {
 

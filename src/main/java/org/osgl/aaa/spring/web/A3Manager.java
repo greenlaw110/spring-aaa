@@ -5,7 +5,7 @@ import org.osgl.aaa.AAAContext;
 import org.osgl.aaa.Principal;
 import org.osgl.util.C;
 import org.osgl.util.E;
-import org.rythmengine.utils.S;
+import org.osgl.util.S;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
