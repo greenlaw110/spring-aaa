@@ -46,7 +46,7 @@ public class A3SessionManager extends A3Manager implements SessionManager.Listen
     @Override
     public void onSessionResolved(Session session) {
         String username = session.get(AAAConfigurer.getSessionKeyUserName());
-        AAAContext ctxt = AAAConfigurer.getAAAContext();
+        AAAContext ctxt = AAAConfigurer.createAAAContext();
         AAA.setContext(ctxt);
         Principal user = ctxt.getPersistentService().findByName(username, Principal.class);
         if (null != user) {
@@ -67,6 +67,7 @@ public class A3SessionManager extends A3Manager implements SessionManager.Listen
     @Override
     public void onSessionCleanUp() {
         param.remove();
+        AAA.clearContext();
     }
 
     @Override

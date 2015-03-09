@@ -41,11 +41,13 @@ public class AAAConfigurer extends WebMvcConfigurerAdapter implements WebMvcConf
         }
     }
 
+    @Deprecated
     public static AAAContext getAAAContext() {
-        if (null == ctxt) {
-            ctxt = new SimpleAAAContext(authen, author, db, superUser, allowSystem ? systemPrincipal: null, allowSystem);
-        }
-        return ctxt;
+        return new SimpleAAAContext(authen, author, db, superUser, allowSystem ? systemPrincipal: null, allowSystem);
+    }
+
+    public static AAAContext createAAAContext() {
+        return new SimpleAAAContext(authen, author, db, superUser, allowSystem ? systemPrincipal: null, allowSystem);
     }
 
     @Autowired
