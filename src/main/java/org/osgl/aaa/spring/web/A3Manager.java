@@ -6,19 +6,25 @@ import org.osgl.aaa.Principal;
 import org.osgl.util.C;
 import org.osgl.util.E;
 import org.osgl.util.S;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * Created by luog on 14/01/14.
- */
 public abstract class A3Manager extends HandlerInterceptorAdapter {
 
     public static interface Listener {
         void onPrincipalResolved(Principal principal, Object handler);
+        void onCleanUp();
+
+        public static abstract class Base implements Listener, InitializingBean {
+            @Override
+            public void afterPropertiesSet() throws Exception {
+                registerListener(this);
+            }
+        }
     }
 
     protected abstract String resolveUserName(HttpServletRequest request);
@@ -32,12 +38,19 @@ public abstract class A3Manager extends HandlerInterceptorAdapter {
         }
     }
 
+    protected final void fireCleanUp() {
+        for (Listener l : listeners) {
+            l.onCleanUp();
+        }
+    }
+
     public static void registerListener(Listener listener) {
         E.NPE(listener);
         listeners.add(listener);
     }
 
     private void cleanUp() {
+        fireCleanUp();
         AAAContext ctxt = AAA.context();
         ctxt.setGuardedTarget(null);
         ctxt.setCurrentPrincipal(null);

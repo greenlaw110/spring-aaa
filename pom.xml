@@ -24,13 +24,16 @@
 0.3.1-SNAPSHOT
 - fix AAAContext ThreadLocal issue on 0.3-SNAPSHOT
 - Fix AAA clean up context issue
+
+0.3.2-SNAPSHOT
+- fix A3Manager listener registration issue
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.osgl</groupId>
     <artifactId>spring-aaa</artifactId>
     <packaging>jar</packaging>
-    <version>0.3.1-SNAPSHOT</version>
+    <version>0.3.2-SNAPSHOT</version>
 
     <name>Spring AAA Plugin</name>
     <description>Enable Spring Application Developer to use OSGL-AAA library to implement Authentication, Authorization and Accounting</description>
