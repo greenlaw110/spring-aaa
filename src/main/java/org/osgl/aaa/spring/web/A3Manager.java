@@ -38,7 +38,7 @@ public abstract class A3Manager extends HandlerInterceptorAdapter {
     }
 
     private void cleanUp() {
-        AAAContext ctxt = AAAConfigurer.getAAAContext();
+        AAAContext ctxt = AAA.context();
         ctxt.setGuardedTarget(null);
         ctxt.setCurrentPrincipal(null);
         AAA.setContext(null);
