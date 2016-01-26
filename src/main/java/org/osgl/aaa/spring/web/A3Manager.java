@@ -64,7 +64,7 @@ public abstract class A3Manager extends HandlerInterceptorAdapter {
         String username = resolveUserName(request);
         Principal user = null;
         if (S.notEmpty(username)) {
-            AAAContext ctxt = AAAConfigurer.getAAAContext();
+            AAAContext ctxt = AAAConfigurer.createAAAContext();
             AAA.setContext(ctxt);
             user = ctxt.getPersistentService().findByName(username, Principal.class);
             if (null != user) {

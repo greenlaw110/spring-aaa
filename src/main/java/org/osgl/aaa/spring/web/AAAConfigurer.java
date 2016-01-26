@@ -1,6 +1,6 @@
 package org.osgl.aaa.spring.web;
 
-import org.osgl._;
+import org.osgl.$;
 import org.osgl.aaa.*;
 import org.osgl.aaa.impl.SimpleAAAContext;
 import org.osgl.aaa.impl.SimplePrincipal;
@@ -12,9 +12,6 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-/**
- * Created by luog on 13/01/14.
- */
 @Configuration
 @EnableWebMvc
 @ComponentScan("org.osgl.aaa.spring")
@@ -35,7 +32,7 @@ public class AAAConfigurer extends WebMvcConfigurerAdapter implements WebMvcConf
 
     public AAAConfigurer() {
         try {
-            sessionManager = _.newInstance("org.osgl.aaa.spring.web.A3SessionManager");
+            sessionManager = $.newInstance("org.osgl.aaa.spring.web.A3SessionManager");
         } catch (Exception e) {
             sessionManager = new A3HttpSessionManager();
         }
@@ -43,11 +40,11 @@ public class AAAConfigurer extends WebMvcConfigurerAdapter implements WebMvcConf
 
     @Deprecated
     public static AAAContext getAAAContext() {
-        return new SimpleAAAContext(authen, author, db, superUser, allowSystem ? systemPrincipal: null, allowSystem);
+        return new SimpleAAAContext(authen, author, db, null, superUser, allowSystem ? systemPrincipal: null, allowSystem);
     }
 
     public static AAAContext createAAAContext() {
-        return new SimpleAAAContext(authen, author, db, superUser, allowSystem ? systemPrincipal: null, allowSystem);
+        return new SimpleAAAContext(authen, author, db, null, superUser, allowSystem ? systemPrincipal: null, allowSystem);
     }
 
     @Autowired

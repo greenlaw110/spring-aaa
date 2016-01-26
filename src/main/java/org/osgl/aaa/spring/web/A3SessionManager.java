@@ -1,6 +1,6 @@
 package org.osgl.aaa.spring.web;
 
-import org.osgl._;
+import org.osgl.$;
 import org.osgl.aaa.AAA;
 import org.osgl.aaa.AAAContext;
 import org.osgl.aaa.Principal;
@@ -13,12 +13,9 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * Created by luog on 14/01/14.
- */
 public class A3SessionManager extends A3Manager implements SessionManager.Listener {
 
-    private static final ThreadLocal<_.T2<Principal, Object>> param = new ThreadLocal<_.T2<Principal, Object>>();
+    private static final ThreadLocal<$.T2<Principal, Object>> param = new ThreadLocal<$.T2<Principal, Object>>();
 
     @Override
     protected String resolveUserName(HttpServletRequest request) {
@@ -31,9 +28,9 @@ public class A3SessionManager extends A3Manager implements SessionManager.Listen
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        _.T2<Principal, Object> t2 = param.get();
+        $.T2<Principal, Object> t2 = param.get();
         if (null == t2) {
-            t2 = _.T2(t2._1, handler);
+            t2 = $.T2(t2._1, handler);
             param.set(t2);
         } else {
             Principal p = t2._1;
@@ -52,9 +49,9 @@ public class A3SessionManager extends A3Manager implements SessionManager.Listen
         if (null != user) {
             ctxt.setCurrentPrincipal(user);
         }
-        _.T2<Principal, Object> t2 = param.get();
+        $.T2<Principal, Object> t2 = param.get();
         if (null == t2) {
-            t2 = _.T2(user, null);
+            t2 = $.T2(user, null);
             param.set(t2);
         } else {
             Object handler = t2._2;
