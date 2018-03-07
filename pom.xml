@@ -17,7 +17,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>spring-aaa</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
 
     <name>Spring AAA Plugin</name>
     <description>Enable Spring Application Developer to use OSGL-AAA library to implement Authentication, Authorization and Accounting</description>
