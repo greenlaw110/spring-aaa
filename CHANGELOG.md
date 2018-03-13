@@ -1,5 +1,9 @@
 # Spring-AAA CHANGELOG
 
+1.0.1 - 13/Mar/2018
+- update to osgl-tool-1.7.2
+
+
 1.0.0
 - update to springframework 3.2.18.Release
 - update to osgl-tool 1.7.0
